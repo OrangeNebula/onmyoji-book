@@ -1,45 +1,40 @@
 import { Asset, AppLoading } from 'expo';
 import React from 'react';
-import { StatusBar } from 'react-native';
-import { StyleSheet, Text, View } from 'react-native';
-
-import HomeScreen from './screens/HomeScreen';
-import AboutScreen from './screens/AboutScreen';
-import TabNavigationExample from './screens/TabNavigationExample';
-import SlidingTabNavigationExample from './screens/SlidingTabNavigationExample';
-import AlertBarsExample from './screens/AlertBarsExample';
-import TranslucentBarExample from './screens/TranslucentBarExample';
-import EventEmitterExample from './screens/EventEmitterExample';
-import CustomNavigationBarExample from './screens/CustomNavigationBarExample';
-import DrawerNavigationExample from './screens/DrawerNavigationExample';
-import TabNavigationLayout from './screens/TabNavigationLayout';
-
 import {
-  createRouter,
-  NavigationProvider,
-  StackNavigation,
-  TabNavigation,
-  TabNavigationItem,
-} from '@expo/ex-navigation';
+  AppRegistry,
+  Text,
+} from 'react-native';
+import { StackNavigator } from 'react-navigation'
+import HomeScreen from './screens/Home';
+import ListShikigamiScreen from './screens/ListShikigami';
+import DetailShikigamiScreen from './screens/DetailShikigami';
 
 const assets = [
-  require('./assets/cat.gif'),
-  require('./assets/colorful-windows.jpg'),
-  require('./assets/paintbrush.jpg'),
-  require('./assets/space.jpg'),
-  require('./assets/sparkles.jpg'),
+  require('./assets/shikigami/susabi.png'),
 ];
 
-export const Router = createRouter(() => ({
-  home: () => HomeScreen,
-  about: () => AboutScreen,
-  tabNavigationExample: () => TabNavigationExample,
-  slidingTabNavigationExample: () => SlidingTabNavigationExample,
-  alertBarsExample: () => AlertBarsExample,
-  translucentBarExample: () => TranslucentBarExample,
-  eventEmitterExample: () => EventEmitterExample,
-  customNavigationBarExample: () => CustomNavigationBarExample,
-}));
+const RootNavigator = StackNavigator({
+  Home: {
+    screen: HomeScreen,
+    navigationOptions: {
+      headerTitle: 'Home',
+    },
+  },
+  ListShikigami: {
+    screen: ListShikigamiScreen,
+    navigationOptions: {
+      headerTitle: 'ListShikigami',
+    },
+  },
+  DetailShikigami: {
+    screen: DetailShikigamiScreen,
+    navigationOptions: {
+      headerTitle: 'DetailShikigami',
+    },
+  },
+}, {
+  initialRouteName: 'Home'
+});
 
 export default class App extends React.Component {
   state = {
@@ -66,12 +61,7 @@ export default class App extends React.Component {
     }
 
     return (
-      <NavigationProvider router={Router}>
-        {/*<StatusBar barStyle="light-content" />*/}
-        {/*<DrawerNavigationExample />*/}
-        {/*<TabNavigationExample />*/}
-        {/*<TabNavigationLayout />*/}
-      </NavigationProvider>
+      <RootNavigator />
     );
   }
 }
