@@ -70,7 +70,7 @@ class ListShikigamiItem extends React.PureComponent {
             style={shikigamiItemStyles.thumb}
           />
           <Text style={shikigamiItemStyles.text}> {this.props.name} </Text>
-          <View style={shikigamiItemStyles.text}>
+          <View style={shikigamiItemStyles.rarityWrap}>
             <Image
               source={iconRarity[this.props.rarity]}
               style={shikigamiItemStyles.rarity}
@@ -97,13 +97,18 @@ const shikigamiItemStyles = StyleSheet.create({
     flex: 1,
     overflow: 'hidden',
   },
+  rarityWrap: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   rarity: {
     width: 20,
     height: 12,
   },
   text: {
-    textAlign: 'center',
     flex: 1,
+    textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
   }
@@ -158,8 +163,8 @@ const listShikigamiStyles = StyleSheet.create({
   separator: {
     alignSelf: 'stretch',
     alignItems: 'center',
-    backgroundColor: color.deepGrey,
-    height: 2,
+    backgroundColor: color.lightGrey,
+    height: 1,
   }
 });
 
