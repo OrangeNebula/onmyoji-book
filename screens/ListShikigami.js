@@ -3,16 +3,28 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
   TouchableOpacity,
   FlatList,
   Image,
 } from 'react-native';
+import color from '../constant/color';
 
-const thumbs = {
+/**
+ * Asset list
+ */
+const iconThumbs = {
   tamamo: require('../assets/shikigami/thumb_tamamo.png'),
 };
 
+const iconRarity = {
+  R: require('../assets/icon/icon-r.png'),
+  SR: require('../assets/icon/icon-sr.png'),
+  SSR: require('../assets/icon/icon-ssr.png'),
+};
+
+/**
+ * Mock-up data
+ */
 const dummyData = [
   {
     id: 1,
@@ -40,20 +52,32 @@ const dummyData = [
   }
 ];
 
+/**
+ * Shikigami Item component
+ */
 class ListShikigamiItem extends React.PureComponent {
   _onPress = () => {
-
+    if (this.props.onPress)
+      this.props.onPress();
   };
 
   render() {
     return (
       <TouchableOpacity onPress={this._onPress}>
         <View style={shikigamiItemStyles.wrap}>
-          <Image source={thumbs[this.props.thumb]} />
-          <Text> {this.props.name} </Text>
-          <Text> {this.props.rarity} </Text>
-          <Text> {this.props.type} </Text>
-          <Text> {this.props.rate} </Text>
+          <Image
+            source={iconThumbs[this.props.thumb]}
+            style={shikigamiItemStyles.thumb}
+          />
+          <Text style={shikigamiItemStyles.text}> {this.props.name} </Text>
+          <View style={shikigamiItemStyles.text}>
+            <Image
+              source={iconRarity[this.props.rarity]}
+              style={shikigamiItemStyles.rarity}
+            />
+          </View>
+          <Text style={shikigamiItemStyles.text}> {this.props.type} </Text>
+          <Text style={shikigamiItemStyles.text}> {this.props.rate} </Text>
         </View>
       </TouchableOpacity>
     )
@@ -63,17 +87,80 @@ class ListShikigamiItem extends React.PureComponent {
 const shikigamiItemStyles = StyleSheet.create({
   wrap: {
     flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'stretch',
+  },
+  thumb: {
+    width: 60,
+    height: 60,
+    resizeMode: 'cover',
+    flex: 1,
+    overflow: 'hidden',
+  },
+  rarity: {
+    width: 20,
+    height: 12,
+  },
+  text: {
+    textAlign: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
 
+/**
+ * Shikigami List component
+ */
 const ListShikigami = ({ navigation }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
     <FlatList
       data={dummyData}
-      renderItem={({item}) => <ListShikigamiItem {...item} />}
+      renderItem={({item}) => (
+        <ListShikigamiItem
+          {...item}
+          onPress={(item) => navigation.navigate('DetailShikigami', item)}
+        />
+      )}
       keyExtractor={(item, index) => item.id}
+      ListHeaderComponent={() => (
+        <View style={listShikigamiStyles.header}>
+          <Text style={listShikigamiStyles.headerText}> 아이콘 </Text>
+          <Text style={listShikigamiStyles.headerText}> 이름 </Text>
+          <Text style={listShikigamiStyles.headerText}> 희귀도 </Text>
+          <Text style={listShikigamiStyles.headerText}> 유형 </Text>
+          <Text style={listShikigamiStyles.headerText}> 점수 </Text>
+        </View>
+      )}
+      ItemSeparatorComponent={() => (
+        <View style={listShikigamiStyles.separator} />
+      )}
+      style={{
+        alignSelf: 'stretch',
+      }}
     />
   </View>
 );
+
+const listShikigamiStyles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: color.deepAzure,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  headerText: {
+    flex: 1,
+    color: color.white,
+    textAlign: 'center',
+  },
+  separator: {
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    backgroundColor: color.deepGrey,
+    height: 2,
+  }
+});
 
 export default ListShikigami;
