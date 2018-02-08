@@ -1,4 +1,4 @@
-import { Asset, AppLoading } from 'expo';
+import { Asset, AppLoading, Font } from 'expo';
 import React from 'react';
 import {
   AppRegistry,
@@ -41,8 +41,8 @@ export default class App extends React.Component {
     bootstrapped: false,
   };
 
-  componentDidMount() {
-    this._bootstrap();
+  async componentDidMount() {
+    await this._bootstrap();
   }
 
   _bootstrap = async () => {
@@ -50,6 +50,9 @@ export default class App extends React.Component {
       Asset.fromModule(module).downloadAsync()
     );
     await Promise.all(promises);
+    await Font.loadAsync({
+      'Arial': require('./assets/fonts/Arial.ttf'),
+    });
     this.setState({
       bootstrapped: true,
     });

@@ -1,3 +1,4 @@
+import { Asset, AppLoading } from 'expo';
 import React from 'react';
 import {
   StyleSheet,
@@ -134,46 +135,82 @@ const skins = {
   ]
 };
 
-const TabShikigamiSpec = () => (
-  <View style={tabShikigamiSpecStyle.wrap}>
-    <Text> 시작 </Text>
-    <Swiper
-    >
-      <View style={tabShikigamiSpecStyle.slide}>
+class TabShikigamiSpec extends React.Component {
+  state = {
+      bootstrapped: false,
+  };
+
+  componentDidMount() {
+      this._bootstrap();
+  }
+
+  _bootstrap = async () => {
+    const promises = skins.tamamo.map(module =>
+      Asset.fromModule(module).downloadAsync()
+    );
+    await Promise.all(promises);
+    this.setState({
+      bootstrapped: true,
+    });
+  };
+
+  render() {
+    if (!this.state.bootstrapped) {
+      return <AppLoading />;
+    }
+
+    return (
+      <View style={tabShikigamiSpecStyle.wrap}>
+        <Text> 시작 </Text>
         <Image
           source={skins.tamamo[0]}
           style={tabShikigamiSpecStyle.image}
         />
+        <Swiper
+          height={300}
+          width={300}
+        >
+          <View style={tabShikigamiSpecStyle.slide} key={1}>
+            <Text> 텍스트 </Text>
+          </View>
+          <View style={tabShikigamiSpecStyle.slide} key={2}>
+            <Image
+              source={skins.tamamo[0]}
+              style={tabShikigamiSpecStyle.image}
+            />
+          </View>
+          <View style={tabShikigamiSpecStyle.slide} key={3}>
+            <Image
+              source={skins.tamamo[1]}
+              style={tabShikigamiSpecStyle.image}
+            />
+          </View>
+          <View style={tabShikigamiSpecStyle.slide} key={4}>
+            <Image
+              source={skins.tamamo[2]}
+              style={tabShikigamiSpecStyle.image}
+            />
+          </View>
+        </Swiper>
+        <Text> 종료 </Text>
       </View>
-      <View style={tabShikigamiSpecStyle.slide}>
-        <Image
-          source={skins.tamamo[1]}
-          style={tabShikigamiSpecStyle.image}
-        />
-      </View>
-      <View style={tabShikigamiSpecStyle.slide}>
-        <Image
-          source={skins.tamamo[2]}
-          style={tabShikigamiSpecStyle.image}
-        />
-      </View>
-    </Swiper>
-    <Text> 종료 </Text>
-  </View>
-);
+    )
+  }
+}
 
 const tabShikigamiSpecStyle = StyleSheet.create({
   wrap: {
 
   },
   slide: {
-    flex: 1,
+    width: 300,
+    height: 300,
     justifyContent: 'center',
     backgroundColor: 'transparent',
   },
   image: {
-    width,
-    flex: 1,
+    width: 300,
+    height: 300,
   }
 });
 
@@ -199,3 +236,5 @@ export default TabNavigator({
 });
 
 //export default DetailShikigami;
+
+//export default TabShikigamiSpec;
